@@ -15,6 +15,8 @@
 #include <QStatusBar>
 #include <QGroupBox>
 #include <QVector>
+#include <QLinearGradient>
+#include <QPalette>
 
 #include "database.h"
 

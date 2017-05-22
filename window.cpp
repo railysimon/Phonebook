@@ -25,10 +25,12 @@ void Window::Layout()
 
     QGroupBox *top_layer_box = new QGroupBox;
     top_layer_box->setLayout(top_layer);
+    top_layer_box->setStyleSheet("border: none;");
 
     QHBoxLayout *middle_layer = new QHBoxLayout;
     table = new QTableWidget;
-    table->setMinimumWidth(420);
+    table->setMinimumWidth(416);
+    table->setStyleSheet("background: rgba(255, 204, 204, 20); border: none;");
     middle_layer->addWidget(table);
 
     QVBoxLayout *search_unit = new QVBoxLayout;
@@ -103,8 +105,9 @@ void Window::Layout()
     show_btn->setEnabled(false);
 
     status = new QStatusBar;
-    status->setStyleSheet("background: rgb(110, 110, 110); color: white; "
+    status->setStyleSheet("background: rgba(110, 100, 110, 100); color: white; "
                           "font-weight: bold;");
+//    status->setGraphicsEffect(new QGraphicsDropShadowEffect);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(top_layer_box);
@@ -113,14 +116,22 @@ void Window::Layout()
     layout->addWidget(show_btn);
     layout->addWidget(status);
     this->setLayout(layout);
-    this->setStyleSheet("background: rgb(135, 159, 157)");
+
+    QLinearGradient gradient(0, 0, width(), height());
+    gradient.setColorAt(0.5, QColor(199, 142, 135));
+    gradient.setColorAt(1, QColor(103, 38, 56));
+    QPalette pal;
+    pal.setBrush(this->backgroundRole(), gradient);
+    this->setPalette(pal);
+
     this->setFixedSize(640, 480);
 }
 
 QLineEdit *Window::edit(QString value)
 {
     QLineEdit *line = new QLineEdit(value);
-    line->setStyleSheet("font-weight: bold;");
+    line->setStyleSheet("background: rgb(255, 250, 246); "
+                        "border: 1px solid gray; font-family: Amsdam cyr-lat;");
 
     return line;
 }
@@ -130,8 +141,10 @@ QPushButton *Window::button(QString title, QString tip)
     QPushButton *btn = new QPushButton(title);
     btn->setCursor(Qt::PointingHandCursor);
     btn->setToolTip(tip);
-    btn->setStyleSheet("QPushButton:hover {background: rgb(70, 150, 30); } "
-                       "QPushButton { font-weight: bold; }");
+    btn->setStyleSheet("QPushButton:hover {background: rgb(233, 231, 235); } "
+                       "QPushButton {background: rgb(225, 198, 172);  "
+                       "font-family: v_CCAdamKubert; border: 1px solid white; }");
+    btn->setMinimumSize(80, 20);
     connect(btn, SIGNAL(clicked(bool)), this, SLOT(slotButton()));
 
     return btn;
@@ -140,7 +153,7 @@ QPushButton *Window::button(QString title, QString tip)
 QRadioButton *Window::radiobutton(QString title)
 {
     QRadioButton *radio = new QRadioButton(title);
-    radio->setFont(QFont("Ubuntu", 10, QFont::Cursive));
+    radio->setFont(QFont("Amsdam cyr-lat", 10, QFont::Cursive));
 
     return radio;
 }
@@ -161,7 +174,7 @@ void Window::slotButton()
             status->showMessage(database->error, 3000);
             database->error.clear();
         }
-        else status->showMessage("Phonebook is opening!", 3000);
+        else status->showMessage("Phonebook is opened!", 3000);
 
         add_btn->setEnabled(true);
         show_btn->setEnabled(true);
